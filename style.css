@@ -17,6 +17,10 @@ main{max-width:34rem;margin:0 auto}
 .go:hover{box-shadow:0 0 0 2px #9CC4FF88}
 .go:disabled{opacity:.5;cursor:wait}
 .go:active{transform:scale(.985)}
+.card{margin:.8rem 0 1.1rem;color:var(--mut);font-size:.95rem;text-align:center}
+.go2{display:flex;align-items:center;justify-content:center;width:100%;min-height:3.5rem;border:1px solid #E9EDF266;border-radius:2px;background:transparent;color:var(--ink);font:500 1.05rem var(--f);cursor:pointer}
+.go2:hover{border-color:var(--acc)}
+.msg .u{margin-top:.5rem;color:var(--acc);overflow-wrap:anywhere}
 .status{min-height:1.5rem;margin:.8rem 0 1.4rem;color:var(--mut);font-size:.92rem;text-align:center}
 section{margin-top:2.25rem}
 h2{font:400 .8rem var(--d);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--line)}
@@ -31,7 +35,9 @@ h2{font:400 .8rem var(--d);letter-spacing:.2em;text-transform:uppercase;color:va
 .apps li:last-child{grid-column:1/-1}
 .apps a,.apps button,.btn{display:flex;align-items:center;justify-content:center;min-height:3.25rem;padding:.5rem .75rem;border-radius:2px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 1rem var(--f);text-decoration:none;cursor:pointer;width:100%}
 .apps a:hover,.apps button:hover,.btn:hover{border-color:var(--acc)}
-.save{margin-top:.6rem}
+.save{margin-top:1.2rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.lnk{background:none;border:0;padding:.6rem .2rem;color:var(--mut);font:400 .92rem var(--f);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.lnk:hover{color:var(--ink)}
 footer{max-width:34rem;margin:0 auto;padding:2rem max(16px,env(safe-area-inset-right)) max(2.2rem,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));color:var(--dim);font-size:.85rem;text-align:center}
 footer a{color:var(--mut)}
 @media (prefers-reduced-motion:reduce){.msgs{scroll-behavior:auto}.go:active{transform:none}}

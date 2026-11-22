@@ -1,7 +1,10 @@
 (function () {
   'use strict';
   var PIC = 'img/stark-1080.jpg';
+  var SITE = 'https://starkforall.com/';
   var go = document.getElementById('go');
+  var go2 = document.getElementById('go2');
+  var picBtn = document.getElementById('pic');
   var statusEl = document.getElementById('status');
   var msgsEl = document.getElementById('msgs');
   var tabsEl = document.getElementById('tabs');
@@ -12,13 +15,13 @@
   var filePromise = null;
 
   function say(m) { statusEl.textContent = m; }
-  function msg() { return cards[cur].textContent.replace(/\s+/g, ' ').trim(); }
-  function firstUrl() { var m = msg().match(/https?:\/\/[^\s]+/); return m ? m[0] : 'https://starkforall.com/'; }
+  function msg() { var ps = cards[cur].querySelectorAll('p'); return ps[0].textContent.replace(/\s+/g, ' ').trim() + '\n' + ps[1].textContent.trim(); }
+  function firstUrl() { var m = msg().match(/https?:\/\/[^\s]+/); return m ? m[0] : SITE; }
   function body() { return msg().replace(/\s*https?:\/\/[^\s]+/g, '').replace(/\s+/g, ' ').replace(/[:\s]+$/, ''); }
   function enc(s) { return encodeURIComponent(s); }
 
   var apps = [
-    ['Messages', function (m) { return 'sms:?&body=' + enc(m); }],
+    ['Messages', function () { return 'sms:?&body=' + enc(firstUrl()); }],
     ['WhatsApp', function (m) { return 'https://wa.me/?text=' + enc(m); }],
     ['X', function (m) { return 'https://twitter.com/intent/tweet?text=' + enc(m); }],
     ['Facebook', function () { return 'https://www.facebook.com/sharer/sharer.php?u=' + enc(firstUrl()) + '&quote=' + enc(body()); }],
@@ -79,13 +82,14 @@
     if (n && n <= cards.length && !e.ctrlKey && !e.metaKey && !e.altKey) select(n - 1, true);
   });
 
-  function copy() {
-    var m = msg();
+  function copyText(m, ok) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      return navigator.clipboard.writeText(m).then(function () { say('Message copied. Paste it anywhere.'); }, function () { say('Copy failed. Select the message above and copy it.'); });
+      return navigator.clipboard.writeText(m).then(function () { say(ok); }, function () { say('Copy failed. Select the message above and copy it.'); });
     }
     say('Copy not available here. Select the message above and copy it.');
   }
+  function copy() { return copyText(msg(), 'Message copied. Paste it anywhere.'); }
+  function copyLink() { return copyText(SITE, 'Link copied. Paste it in a message.'); }
   cb.addEventListener('click', copy);
 
   function loadFile() {
@@ -101,26 +105,33 @@
     return filePromise;
   }
 
-  function doShare() {
-    var m = msg();
-    var withFile = file && navigator.canShare && navigator.canShare({ files: [file] });
-    // The picture, the message and the link when files can be shared; otherwise the message and the link.
-    var data = withFile ? { files: [file], text: m, title: 'Stark' } : { text: body(), url: firstUrl() };
+  function send(data, fallback) {
     return navigator.share(data).catch(function (e) {
       if (e && e.name === 'AbortError') return;
-      return copy();
+      return fallback();
     });
   }
-
+  // The big button: the link alone, so chat apps build a tap-to-open card.
   go.addEventListener('click', function () {
+    if (!navigator.share) { copyLink(); return; }
+    send({ url: SITE }, copyLink);
+  });
+  go2.addEventListener('click', function () {
     if (!navigator.share) { copy(); return; }
-    if (file) { doShare(); return; }
-    go.disabled = true; say('Getting the picture...');
-    loadFile().then(function () { go.disabled = false; say(''); return doShare(); });
+    send({ text: msg() }, copy);
+  });
+  // The picture is a small option at the bottom.
+  picBtn.addEventListener('click', function () {
+    if (!navigator.share) { copyLink(); return; }
+    var go_ = function () {
+      var withFile = file && navigator.canShare && navigator.canShare({ files: [file] });
+      send(withFile ? { files: [file], text: msg(), title: 'Stark' } : { text: body(), url: firstUrl() }, copy);
+    };
+    if (file) { go_(); return; }
+    say('Getting the picture...');
+    loadFile().then(function () { say(''); go_(); });
   });
 
   select(0, false);
-  go.disabled = false;
-  say(navigator.share ? 'Tap to share the picture and message.' : 'Sharing is not available here: pick an app below or copy the message.');
-  loadFile();
+  if (!navigator.share) say('Sharing is not available here: the buttons copy instead, or pick an app below.');
 })();
