@@ -7,9 +7,9 @@ a{color:var(--acc);text-underline-offset:3px}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:2px}
 main{max-width:34rem;margin:0 auto}
 .hero{padding-top:env(safe-area-inset-top);margin-top:clamp(0px,4vh,32px)}
-.eyes{display:block;width:100%;height:auto;aspect-ratio:15/8;background:#000}
-.line{height:1px;width:86%;margin:-.6rem auto 0;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.7}
-.wm{line-height:0;margin:2.1rem 0 0;font-size:0}
+.eyes{display:block;width:100%;height:auto;aspect-ratio:5/3;background:#000}
+.line{display:none}
+.wm{line-height:0;margin:.2rem 0 0;font-size:0}
 .wm img{display:block;margin:0 auto;width:min(66%,16.5rem);height:auto}
 .act{padding:2.4rem max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
 .go{display:flex;align-items:center;justify-content:center;width:100%;min-height:6.5rem;border:0;border-radius:2px;background:var(--ink);color:#000;padding:1rem;cursor:pointer;text-align:center}
